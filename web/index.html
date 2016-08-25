@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Chat room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="theme/bootstrap.css" media="screen">
+    <link rel="stylesheet" href="theme/usebootstrap.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="bootstrap/html5shiv.js"></script>
+      <script src="bootstrap/respond.min.js">dsaffds</script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <img class="header-logo" src="image/incinity-logo.png">
+        </div>
+        <div class="navbar-collapse collapse nav navbar-default navbar-right" id="navbar-main">
+            <h1>
+                Project: Chat server
+            </h1>
+            <p>
+                Simple chat server using WebSockets
+            </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+    <div class="modal" id="setNickname">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Welcome to chat room</h4>
+          </div>
+          <div class="modal-body">
+            <p>To start chatting, please fill in your name.</p>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Your nickname..." id="nicknameText">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="chatServer.setNickname();" id="nicknameButton">Set nickname</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+      <div class="page-header" id="banner">
+          <div class="row">
+              <div class="col-lg-8" id="mainThread">
+                  <h2>Discussion</h2>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <footer class="footer navbar-fixed-bottom">
+        <div class="container">
+            <div class="form-group">
+                  <label class="control-label">Write a message</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Type message here..." id="messageText">
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" type="button" id="messageButton" onclick="chatServer.sendMessage(getElementById('messageText').value);">Send</button>
+                    </span>
+                  </div>
+                </div>
+        </div>  
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+	<script src="bootstrap/usebootstrap.js"></script>
+    <script src="script/custom.js"></script>
+    <script>
+    $(document).ready(function () {
+        
+        // open WebSocket connection
+        chatServer.init();
+        
+        // display modal after page loaded
+        $('#setNickname').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+
+        // focus mandatory field nickname
+        document.getElementById(chatServer.nicknameTextId).focus();
+        
+        // bind ENTER to click event on message Send button
+        document.getElementById("messageText")
+            .addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode == 13) {
+                document.getElementById("messageButton").click();
+            }
+        });
+        
+        // bind ENTER to click event on Set nickname button
+        document.getElementById(chatServer.nicknameTextId)
+            .addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode == 13) {
+                document.getElementById("nicknameButton").click();
+            }
+        });        
+    });
+    </script>
+  </body>
+</html>
